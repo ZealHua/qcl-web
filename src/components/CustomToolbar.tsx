@@ -10,7 +10,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-
+import { grey } from '@mui/material/colors';
 const CustomToolbar: React.FC<{ handleDrawerToggle: () => void }> = ({
                                                                          handleDrawerToggle,
                                                                      }) => {
@@ -25,8 +25,8 @@ const CustomToolbar: React.FC<{ handleDrawerToggle: () => void }> = ({
     };
 
     return (
-        <AppBar position="fixed">
-            <Toolbar sx={{display: 'flex'}}>
+        <AppBar position="fixed" elevation={0}>
+            <Toolbar sx={{display: 'flex',backgroundColor:grey[900], boxShadow: 'none !important', borderBottom: 'none',}}>
                 <IconButton
                     edge="start"
                     color="inherit"

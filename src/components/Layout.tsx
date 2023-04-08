@@ -11,14 +11,18 @@ import ChatArea from './ChatArea';
 import ConversationDrawer from './ConversationDrawer';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CustomToolbar from './CustomToolbar';
-
+import { grey } from '@mui/material/colors';
 const drawerWidth = 240;
 
 const theme = createTheme({
   palette: {
-    mode: 'light',
+    mode: 'dark', // Set the color mode to 'dark'
+    background: {
+      default: grey[900], // Set the background color to a shade of gray
+    },
   },
 });
+
 
 const Layout: React.FC = () => {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -37,9 +41,9 @@ const Layout: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <AppBar position="fixed">
-        <CustomToolbar />
-      </AppBar>
+      {/*<AppBar position="fixed">
+          <CustomToolbar />
+      </AppBar>*/}
       <Box sx={{ display: 'flex' }}>
         <Hidden smDown implementation="css">
           <Drawer
@@ -82,9 +86,9 @@ const Layout: React.FC = () => {
             flexDirection: 'column',
             height: '100vh',
             boxSizing: 'border-box',
+            marginTop: '64px',
           }}
         >
-          <Toolbar />
           <ChatArea />
         </Container>
       </Box>
