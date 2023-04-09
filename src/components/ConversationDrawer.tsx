@@ -13,6 +13,22 @@ import WorkIcon from '@mui/icons-material/Work';
 import SettingsIcon from '@mui/icons-material/Settings';
 import {styled} from '@mui/system';
 import Stack from '@mui/material/Stack';
+import LightbulbIcon from '@mui/icons-material/Lightbulb';
+import NightsStayIcon from '@mui/icons-material/NightsStay';
+
+const iconColor = (currentTheme) => ({
+    color: isDarkTheme(currentTheme) ? 'white' : 'grey.900',
+});
+
+const menuItemStyles = (currentTheme) => {
+    return {
+        '&:hover': {
+            backgroundColor: isDarkTheme(currentTheme) ? 'primary.dark' : 'primary.light',
+        },
+        marginTop: 2,
+        marginBottom: 2,
+    };
+};
 
 const CustomDrawer = styled(Drawer)({
     width: 240,
@@ -22,14 +38,25 @@ const CustomDrawer = styled(Drawer)({
     },
 });
 
+const isDarkTheme = (currentTheme): boolean => {
+    if (!currentTheme) {
+        return false;
+    }
+    return currentTheme.palette.mode === 'dark';
+};
+
+
 interface ConversationDrawerProps {
     onMenuItemClick: (menuItem: string) => void;
-    onThemeToggle: () => void; // 新增属性，用于切换主题
+    onThemeToggle: () => void;
+    currentTheme: Theme;
 }
 
-const ConversationDrawer: React.FC<ConversationDrawerProps> = ({onMenuItemClick, onThemeToggle}) => {
-    const [selected, setSelected] = useState('chat');
 
+const ConversationDrawer: React.FC<ConversationDrawerProps> = ({onMenuItemClick, onThemeToggle, currentTheme}) => {
+
+    const [selected, setSelected] = useState('chat');
+    const darkTheme = isDarkTheme(currentTheme);
     const handleMenuItemClick = (menuItem: string) => {
         onMenuItemClick(menuItem);
         setSelected(menuItem);
@@ -58,20 +85,16 @@ const ConversationDrawer: React.FC<ConversationDrawerProps> = ({onMenuItemClick,
                     onClick={() => handleMenuItemClick('chat')}
                     selected={selected === 'chat'}
                     sx={{
-                        '&:hover': {
-                            backgroundColor: 'primary.dark',
-                        },
-                        marginTop: 2,
-                        marginBottom: 2,
+                        ...menuItemStyles(currentTheme),
                         ...(selected === 'chat' && {
-                            backgroundColor: 'primary.light',
+                            backgroundColor: isDarkTheme(currentTheme) ? 'primary.light' : 'primary.dark',
                             borderLeft: '4px solid',
                             borderColor: 'primary.main',
                         }),
                     }}
                 >
                     <ListItemIcon>
-                        <ChatIcon sx={{color: 'primary.main'}}/>
+                        <ChatIcon sx={iconColor(currentTheme)}/>
                     </ListItemIcon>
                     <ListItemText primary="小梦AI"
                                   sx={{fontSize: '1.2rem', fontWeight: 'bold', color: 'text.primary'}}/>
@@ -81,20 +104,16 @@ const ConversationDrawer: React.FC<ConversationDrawerProps> = ({onMenuItemClick,
                     onClick={() => handleMenuItemClick('profile')}
                     selected={selected === 'profile'}
                     sx={{
-                        '&:hover': {
-                            backgroundColor: 'primary.dark',
-                        },
-                        marginTop: 2,
-                        marginBottom: 2,
+                        ...menuItemStyles(currentTheme),
                         ...(selected === 'profile' && {
-                            backgroundColor: 'primary.light',
+                            backgroundColor: isDarkTheme(currentTheme) ? 'primary.light' : 'primary.dark',
                             borderLeft: '4px solid',
                             borderColor: 'primary.main',
                         }),
                     }}
                 >
                     <ListItemIcon>
-                        <AccountBoxIcon sx={{color: 'primary.main'}}/>
+                        <AccountBoxIcon sx={iconColor(currentTheme)}/>
                     </ListItemIcon>
                     <ListItemText primary="个人主页"
                                   sx={{fontSize: '1.2rem', fontWeight: 'bold', color: 'text.primary'}}/>
@@ -104,34 +123,34 @@ const ConversationDrawer: React.FC<ConversationDrawerProps> = ({onMenuItemClick,
                     onClick={() => handleMenuItemClick('jobs')}
                     selected={selected === 'jobs'}
                     sx={{
-                        '&:hover': {
-                            backgroundColor: 'primary.dark',
-                        },
-                        marginTop: 2,
-                        marginBottom: 2,
+                        ...menuItemStyles(currentTheme),
                         ...(selected === 'jobs' && {
-                            backgroundColor: 'primary.light',
+                            backgroundColor: isDarkTheme(currentTheme) ? 'primary.light' : 'primary.dark',
                             borderLeft: '4px solid',
                             borderColor: 'primary.main',
                         }),
                     }}
                 >
                     <ListItemIcon>
-                        <WorkIcon sx={{color: 'primary.main'}}/>
+                        <WorkIcon sx={iconColor(currentTheme)}/>
                     </ListItemIcon>
                     <ListItemText primary="招聘广场"
                                   sx={{fontSize: '1.2rem', fontWeight: 'bold', color: 'text.primary'}}/>
                 </ListItem>
             </List>
             {/* 主题切换按钮 */}
-            <ListItem
-                button
-                onClick={handleThemeToggle}
-            >
+            <ListItem button onClick={handleThemeToggle}>
                 <ListItemIcon>
-                    <SettingsIcon sx={{color: 'primary.main'}}/>
+                    {isDarkTheme(currentTheme) ? (
+                        <LightbulbIcon sx={iconColor(currentTheme)}/>
+                    ) : (
+                        <NightsStayIcon sx={iconColor(currentTheme)}/>
+                    )}
                 </ListItemIcon>
-                <ListItemText primary="主题选择" sx={{fontSize: '1.2rem', fontWeight: 'bold', color: 'text.primary'}}/>
+                <ListItemText
+                    primary={isDarkTheme(currentTheme) ? '浅色主题' : '深色主题'}
+                    sx={{fontSize: '1.2rem', fontWeight: 'bold', color: 'text.primary'}}
+                />
             </ListItem>
             {/* 可以在这里继续添加其他菜单项，例如：我的账户、寻求帮助、退出登录 */}
         </CustomDrawer>
