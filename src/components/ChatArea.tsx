@@ -17,20 +17,16 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuIcon from '@mui/icons-material/Menu';
 
-
-const messages = [
-    {sender: 'user', content: 'Hi there!'},
-    {sender: 'ai', content: 'Hello! How can I help you?'},
-    // ...
-];
+const messages = [];
 const ChatArea: React.FC = () => {
     const inputRef = React.useRef<HTMLInputElement>();
 
-    {/* Add the FormControl component here */
-    }
     const [selectedGptModel, setSelectedGptModel] = React.useState('gpt-3');
     const [inputFocused, setInputFocused] = React.useState(false);
-
+    const [messages, setMessages] = React.useState([  // Add this line to make messages a state
+        // {sender: 'user', content: 'Hi there!'},
+        // {sender: 'ai', content: 'Hello! How can I help you?'},
+    ]);
     const handleGptModelChange = (
         event: React.ChangeEvent<{ value: unknown }>
     ) => {
@@ -42,15 +38,18 @@ const ChatArea: React.FC = () => {
         const text = inputRef.current?.value;
 
         if (text) {
+            // Add the user message to the messages state
+            setMessages([...messages, {sender: 'user', content: text}]);
+
             try {
                 // Send a POST request to the API route
-                const response = await axios.post('/api/chat', {text});
+                const response = await axios.post('/api/chat', {input_text: text});
 
                 // Get the response message from the JSON response
-                const aiMessage = response.data.message;
+                const aiMessage = response.data.response;
 
-                // Add the AI response to the messages array (you should update your messages state instead of directly modifying it)
-                messages.push({sender: 'ai', content: aiMessage});
+                // Add the AI response to the messages state
+                setMessages((prevMessages) => [...prevMessages, {sender: 'ai', content: aiMessage}]);
 
                 // Clear the input field
                 if (inputRef.current) {
@@ -61,6 +60,7 @@ const ChatArea: React.FC = () => {
             }
         }
     };
+
     return (
         <Box sx={{flexGrow: 1, display: 'flex', flexDirection: 'column', p: 0, m: 0}}>
             {/* Add the FormControl component here */}
@@ -88,8 +88,8 @@ const ChatArea: React.FC = () => {
                         onChange={handleGptModelChange}
                         displayEmpty // Add this line to remove the label
                     >
-                        <MenuItem value={'gpt-3'}>GPT-3</MenuItem>
-                        <MenuItem value={'gpt-4'}>GPT-4</MenuItem>
+                        <MenuItem value={'gpt-3'}>小梦1.0</MenuItem>
+                        <MenuItem value={'gpt-4'}>小梦2.0</MenuItem>
                     </Select>
                 </FormControl>
             </Box>
@@ -128,25 +128,27 @@ const ChatArea: React.FC = () => {
                     </ListItem>
                 ))}
             </List>
-                {/* 背景Logo */}
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        zIndex: -1,
-                    }}
-                >
-                    <Stack direction="row" spacing={1}>
-                        <Typography variant="h5" color="grey.600">
-                            量子职业实验室
-                        </Typography>
-                    </Stack>
-                </Box>
+            {/* 背景Logo
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    zIndex: -1,
+                }}
+            >
+                <Stack direction="row" spacing={1}>
+                    <Typography variant="h5" color="grey.600">
+                        量子
+                        <span style={{color: 'orange'}}>职业</span>
+                        实验室
+                    </Typography>
+                </Stack>
+            </Box> */}
             <Box
                 sx={{
                     display: 'flex',
@@ -161,10 +163,17 @@ const ChatArea: React.FC = () => {
                     size="small"
                     inputRef={inputRef}
                     placeholder="Type your message here..."
+                    onKeyPress={(event) => {
+                        if (event.key === 'Enter') {
+                            handleSendMessage();
+                            event.preventDefault();
+                        }
+                    }}
                     sx={{
+                        maxWidth: '80%', // Change the maxWidth value to your desired width
                         borderRadius: '25px',
-                        color: 'white', // Add this line to change the text color to white
-                        backgroundColor: 'transparent', // Add this line to remove the background color
+                        color: 'white',
+                        backgroundColor: 'transparent',
                         '& .MuiOutlinedInput-root': {
                             '& fieldset': {
                                 borderRadius: '25px',
@@ -175,7 +184,7 @@ const ChatArea: React.FC = () => {
                         endAdornment: (
                             <IconButton
                                 edge="end"
-                                color="primary"
+                                color="default" // Change this to "default" to set the icon color to grey
                                 onClick={handleSendMessage}
                             >
                                 <SendIcon/>
@@ -183,6 +192,7 @@ const ChatArea: React.FC = () => {
                         ),
                     }}
                 />
+
             </Box>
         </Box>
     );
