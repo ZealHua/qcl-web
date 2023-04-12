@@ -1,0 +1,7 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="150" cy="150" r="100" fill="none" stroke="#D44638" stroke-width="3"/>
+  <ellipse cx="150" cy="150" rx="75" ry="25" fill="none" stroke="#D44638" stroke-width="3"/>
+  <path d="M 190 150 a 40 40 0 1 0 -80 0 a 40 40 0 1 0 80 0" fill="none" stroke="#D44638" stroke-width="3"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="48" font-weight="bold" font-family="Arial, sans-serif" fill="#D44638">量子</text>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="32" font-weight="bold" font-family="Arial, sans-serif" fill="#D44638" dy="1.5em">职业实验室</text>
+</svg>
